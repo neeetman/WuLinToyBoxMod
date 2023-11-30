@@ -76,13 +76,9 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(TargetDir)*.dll&quot; &quot;E:\Programs\Steam\steamapps\common\WulinSH\BepInEx\plugins\HaxxToyBox\&quot; /Y" />
-  </Target>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="D:\GameEditorProjects\Projects\HaxxToyBox\.editorconfig" />
-  </ItemGroup>
+  </Target>-->
 
   <ItemGroup>
     <None Remove="Assets\toybox" />
@@ -92,7 +88,4 @@
     <EmbeddedResource Include="Assets\toybox" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="D:\GameEditorProjects\Projects\HaxxToyBox\.editorconfig" />
-  </ItemGroup>
 </Project>

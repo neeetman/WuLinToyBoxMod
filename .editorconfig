@@ -60,6 +60,11 @@ tab_width = 4
 indent_size = 4
 end_of_line = crlf
 dotnet_style_explicit_tuple_names = true:suggestion
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
+dotnet_style_prefer_compound_assignment = true:suggestion
+dotnet_style_prefer_simplified_interpolation = true:suggestion
+dotnet_style_namespace_match_folder = true:suggestion
 
 [*.cs]
 csharp_using_directive_placement = outside_namespace:silent
@@ -77,3 +82,7 @@ csharp_style_expression_bodied_accessors = true:silent
 csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 csharp_indent_labels = one_less_than_current
+csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_throw_expression = true:suggestion
+csharp_style_prefer_null_check_over_type_check = true:suggestion
+csharp_prefer_simple_default_expression = true:suggestion
