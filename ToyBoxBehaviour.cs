@@ -2,6 +2,7 @@
 using HaxxToyBox.Config;
 using HaxxToyBox.GUI;
 using HaxxToyBox.Utilities;
+using System.Reflection;
 using WuLin;
 using InputManager = UniverseLib.Input.InputManager;
 
@@ -13,6 +14,7 @@ internal class ToyBoxBehaviour : MonoBehaviour
 {
     public static class Constants
     {
+        public const string BundleRes = "Assets.toybox";
         public const string BundlePath = "/HaxxToyBox/AssetBundle/toybox";
         public const string AssetName = "ToyBoxCanvas";
     }
@@ -70,7 +72,15 @@ internal class ToyBoxBehaviour : MonoBehaviour
         }
     }
 
-    private void LoadAsset()
+    private void LoadAsset(bool fromFile=false)
+    {
+        if (fromFile)
+            LoadAssetFromFile();
+        else
+            LoadAssetFromEmbedded();
+    }
+
+    private void LoadAssetFromFile()
     {
         if (!File.Exists(Paths.PluginPath + Constants.BundlePath)) {
             ToyBox.LogWarning("Skipping AssetBundle Loading - AssetBundle Doesn't Exist at: " + Paths.PluginPath + Constants.BundlePath);
@@ -99,6 +109,47 @@ internal class ToyBoxBehaviour : MonoBehaviour
         }
         else {
             ToyBox.LogMessage("Failed to Load Asset!");
+        }
+    }
+
+    private void LoadAssetFromEmbedded()
+    {
+        ToyBox.LogMessage($"Trying to load {Constants.AssetName} from embedded resources...");
+
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceName = $"{assembly.GetName().Name}.{Constants.BundleRes}";
+
+        using (Stream stream = assembly.GetManifestResourceStream(resourceName)) {
+            if (stream == null) {
+                ToyBox.LogWarning($"Asset bundle not found in embedded resources: {resourceName}");
+                return;
+            }
+
+            byte[] buffer = new byte[stream.Length];
+            stream.Read(buffer, 0, buffer.Length);
+
+            var guiAsset = AssetBundle.LoadFromMemory(buffer);
+            if (guiAsset == null) {
+                ToyBox.LogMessage("AssetBundle Failed to Load from Memory!");
+                return;
+            }
+
+            ToyBox.LogMessage("Trying to Load Prefab...");
+            var guiPrefab = guiAsset.LoadAsset<GameObject>(Constants.AssetName);
+            if (guiPrefab != null) {
+                ToyBox.LogMessage("Asset Loaded! Trying to Instantiate Prefab...");
+                GUICanvas = Instantiate(guiPrefab);
+                GUICanvas.name = "ToyBoxCanvas";
+                DontDestroyOnLoad(GUICanvas);
+                GUICanvas.SetActive(false);
+
+                //trainerGUI = GUICanvas.AddComponent<TrainerGUI>();
+
+                _initialized = true;
+            }
+            else {
+                ToyBox.LogMessage("Failed to Load Asset!");
+            }
         }
     }
 
