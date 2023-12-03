@@ -13,6 +13,17 @@
 
 1. 克隆仓库到本地。
 2. 使用 Visual Studio 打开 `HaxxToyBox.sln`。
+3. 根据情况修改项目属性中的如下内容 
+```
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy &quot;E:\Programs\Steam\steamapps\common\WulinSH\BepInEx\interop\*.dll&quot; &quot;$(ProjectDir)lib\&quot; /Y" />
+  </Target>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)*.dll&quot; &quot;E:\Programs\Steam\steamapps\common\WulinSH\BepInEx\plugins\HaxxToyBox\&quot; /Y" />
+  </Target>
+```
+
 
 ## License
 
